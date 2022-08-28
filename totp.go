@@ -112,6 +112,18 @@ func makeTOTP(key []byte, account, issuer string, hash crypto.Hash, digits int) 
 	return otp, nil
 }
 
+func NewTOTPWithKey(key []byte, account, issuer string, hash crypto.Hash, digits int) (*Totp, error) {
+	otp := new(Totp)
+	otp.key = key
+	otp.account = account
+	otp.issuer = issuer
+	otp.digits = digits
+	otp.stepSize = 30 // we set it to 30 seconds which is the recommended value from the RFC
+	otp.clientOffset = 0
+	otp.hashFunction = hash
+	return otp, nil
+}
+
 // This function validates the user provided token
 // It calculates 3 different tokens. The current one, one before now and one after now.
 // The difference is driven by the TOTP step size
@@ -149,9 +161,9 @@ func (otp *Totp) Validate(userCode string) error {
 
 	// 1 calculate the 3 tokens
 	tokens := make([]string, 3)
-	token0Hash := sha256.Sum256([]byte(calculateTOTP(otp, -1)))
-	token1Hash := sha256.Sum256([]byte(calculateTOTP(otp, 0)))
-	token2Hash := sha256.Sum256([]byte(calculateTOTP(otp, 1)))
+	token0Hash := sha256.Sum256([]byte(CalculateTOTP(otp, -1)))
+	token1Hash := sha256.Sum256([]byte(CalculateTOTP(otp, 0)))
+	token2Hash := sha256.Sum256([]byte(CalculateTOTP(otp, 1)))
 
 	tokens[0] = hex.EncodeToString(token0Hash[:]) // 30 seconds ago token
 	tokens[1] = hex.EncodeToString(token1Hash[:]) // current token
@@ -219,12 +231,12 @@ func (otp *Totp) OTP() (string, error) {
 	}
 
 	// it uses the index 0, meaning that it calculates the current one
-	return calculateTOTP(otp, 0), nil
+	return CalculateTOTP(otp, 0), nil
 }
 
 // Private function which calculates the OTP token based on the index offset
 // example: 1 * steps or -1 * steps
-func calculateTOTP(otp *Totp, index int) string {
+func CalculateTOTP(otp *Totp, index int) string {
 	var h hash.Hash
 
 	switch otp.hashFunction {

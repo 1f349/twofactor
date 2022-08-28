@@ -355,17 +355,17 @@ func TestCounterSynchronization(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	token0 := calculateTOTP(otp, 0)
+	token0 := CalculateTOTP(otp, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	token_1 := calculateTOTP(otp, -1)
+	token_1 := CalculateTOTP(otp, -1)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	token1 := calculateTOTP(otp, 1)
+	token1 := CalculateTOTP(otp, 1)
 	if err != nil {
 		t.Fatal(err)
 	}
