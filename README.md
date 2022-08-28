@@ -98,6 +98,26 @@ import github.com/sec51/twofactor
 
 5- All following authentications should display only a input field with no QR code.
 
+#### Case 2: Calculate OTP from secret
+If you used the totp.Secret() function, you got a string, so first we have to convert it back into an []byte
+object and after start to initialize the object.
+
+```go
+secretBytes, err := base32.StdEncoding.DecodeString(reqSecret.TwofactorSecret)
+if err != nil {
+	panic(fmt.Errorf("couldn't convert base32 secret to string: %w", err))
+}
+
+totp, err := twofactor.NewTOTPWithKey(secretBytes, "YOUR_USER_ACCOUNT", "YOUR_ISSUER", crypto.SHA256, 6)
+if err != nil {
+	panic(fmt.Errorf("couldn't create TOTP object: %w", err))
+}
+
+otp := twofactor.CalculateTOTP(totp, 0)
+
+fmt.Printf("OTP: %v\n", otp)
+```
+
 
 ### References
 
@@ -108,7 +128,7 @@ import github.com/sec51/twofactor
 
 ### Author
 
-`totp` was written by Sec51 <info@sec51.com>.
+Initialliy `totp` was written by Sec51 <info@sec51.com> and the further development was made by dnnspaul <dennis@blaumedia.com>.
 
 
 ### License
