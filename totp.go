@@ -21,7 +21,6 @@ import (
 
 	"github.com/sec51/convert"
 	"github.com/sec51/convert/bigendian"
-	"github.com/sec51/cryptoengine"
 	qr "github.com/sec51/qrcode"
 )
 
@@ -466,54 +465,23 @@ func (otp *Totp) ToBytes() ([]byte, error) {
 		}
 	}
 
-	// encrypt the TOTP bytes
-	engine, err := cryptoengine.InitCryptoEngine(otp.issuer)
-	if err != nil {
-		return nil, err
-	}
-
-	// init the message to be encrypted
-	message, err := cryptoengine.NewMessage(buffer.String(), message_type)
-	if err != nil {
-		return nil, err
-	}
-
-	// encrypt it
-	encryptedMessage, err := engine.NewEncryptedMessage(message)
-	if err != nil {
-		return nil, err
-	}
-
-	return encryptedMessage.ToBytes()
+	return buffer.Bytes(), nil
 
 }
 
 // TOTPFromBytes converts a byte array to a totp object
 // it stores the state of the TOTP object, like the key, the current counter, the client offset,
 // the total amount of verification failures and the last time a verification happened
-func TOTPFromBytes(encryptedMessage []byte, issuer string) (*Totp, error) {
-
-	// init the cryptoengine
-	engine, err := cryptoengine.InitCryptoEngine(issuer)
-	if err != nil {
-		return nil, err
-	}
-
-	// decrypt the message
-	data, err := engine.Decrypt(encryptedMessage)
-	if err != nil {
-		return nil, err
-	}
-
+func TOTPFromBytes(message []byte, issuer string) (*Totp, error) {
 	// new reader
-	reader := bytes.NewReader([]byte(data.Text))
+	reader := bytes.NewReader([]byte(message))
 
 	// otp object
 	otp := new(Totp)
 
 	// get the length
 	length := make([]byte, 4)
-	_, err = reader.Read(length) // read the 4 bytes for the total length
+	_, err := reader.Read(length) // read the 4 bytes for the total length
 	if err != nil && err != io.EOF {
 		return otp, err
 	}
