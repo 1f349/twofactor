@@ -1,7 +1,6 @@
 #### Current test status
 
-[![Build Status](https://travis-ci.org/sec51/twofactor.svg?branch=master)](https://travis-ci.org/sec51/twofactor.svg?branch=master)
-[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/sec51/twofactor/)
+[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/1f349/twofactor/)
 
 ## `totp`
 
@@ -9,13 +8,11 @@ This package implements the RFC 6238 OATH-TOTP algorithm;
 
 ### Installation
 
-```go get github.com/sec51/twofactor```
+```go get github.com/1f349/twofactor```
 
 ### Features
 
 * Built-in support for secure crypto keys generation
-
-* Built in encryption of the secret keys when converted to bytes, so that they can be safely transmitted over the network, or stored in a DB
 
 * Built-in back-off time when a user fails to authenticate more than 3 times
 
@@ -43,9 +40,9 @@ You can then retrieve the object back with the function: `TOTPFromBytes`
 
 > You can transfer the bytes securely via a network connection (Ex. if the database is in a different server) because they are encrypted and authenticated.
 
-The struct needs to be stored in a persistent layer becase its values, like last token verification time, 
+The struct needs to be stored in a persistent layer because its values, like last token verification time, 
 max user authentication failures, etc.. need to be preserved.
-The secret key needs to be preserved too, between the user accound and the user device.
+The secret key needs to be preserved too, between the user account and the user device.
 The secret key is in fact used to derive tokens.
 
 ### Upcoming features
@@ -64,7 +61,7 @@ The secret key is in fact used to derive tokens.
 1- Import the library
 
 ```
-import github.com/sec51/twofactor
+import github.com/1f349/twofactor
 ```
 
 2- Instanciate the `totp` object via:
@@ -128,7 +125,7 @@ fmt.Printf("OTP: %v\n", otp)
 
 ### Author
 
-Initialliy `totp` was written by Sec51 <info@sec51.com> and the further development was made by dnnspaul <dennis@blaumedia.com>.
+Initialliy `totp` was written by Sec51 <info@sec51.com> and the further development was made by dnnspaul <dennis@blaumedia.com> and 1f349.
 
 
 ### License

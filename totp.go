@@ -292,7 +292,7 @@ func (otp *Totp) Secret() string {
 
 // URL returns a suitable URL, such as for the Google Authenticator app
 // example: otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example
-func (otp *Totp) url() (string, error) {
+func (otp *Totp) URL() (string, error) {
 
 	// verify the proper initialization
 	if err := totpHasBeenInitialized(otp); err != nil {
@@ -333,7 +333,7 @@ func (otp *Totp) url() (string, error) {
 func (otp *Totp) QR() ([]byte, error) {
 
 	// get the URL
-	u, err := otp.url()
+	u, err := otp.URL()
 
 	// check for errors during initialization
 	// this is already done on the URL method

@@ -1,5 +1,5 @@
 /*
-The package twofactor implements the RFC 6238 TOTP: Time-Based One-Time Password Algorithm
+Package twofactor implements the RFC 6238 TOTP: Time-Based One-Time Password Algorithm
 
 The library provides a simple and secure way to generate and verify the OTP tokens
 and provides the possibility to display QR codes out of the box
